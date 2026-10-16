@@ -38,7 +38,7 @@ Open PowerShell and run:
 irm https://raw.githubusercontent.com/EODBruz/PlayStation-Browser/main/PlayStationBrowser.ps1 | iex
 ```
 
-On first run the app copies itself to `%APPDATA%\PlayStationBrowser` and puts a **PlayStation Browser** shortcut on your desktop. Use that shortcut from then on.
+On first run the app copies itself to `C:\Users\<your name>\AppData\Roaming\PlayStationBrowser` (the same place as `%APPDATA%\PlayStationBrowser`) and puts a **PlayStation Browser** shortcut on your desktop. Use that shortcut from then on.
 
 ## How to use
 
@@ -49,11 +49,14 @@ On first run the app copies itself to `%APPDATA%\PlayStationBrowser` and puts a 
 
 For example, IP `192.168.0.1` and port `8080` opens `http://192.168.0.1:8080`.
 
-You can also edit the saved IP directly in `%APPDATA%\PlayStationBrowser\ip.txt`.
+You can also edit the saved IP directly in `C:\Users\<your name>\AppData\Roaming\PlayStationBrowser\ip.txt`.
 
 ## Where files are stored
 
-Everything lives in `%APPDATA%\PlayStationBrowser`:
+Everything lives in `C:\Users\<your name>\AppData\Roaming\PlayStationBrowser` (that is where `%APPDATA%` points).
+
+To open it quickly, press **Win + R**, type `%APPDATA%\PlayStationBrowser` and press Enter.
+
 
 | File | What it is |
 | --- | --- |
@@ -65,7 +68,7 @@ The only other thing it creates is the desktop shortcut.
 
 ## Uninstall
 
-Download `PlayStationBrowser_Uninstall.ps1` and run it with PowerShell. It closes the app if it is running, then removes the AppData folder (including your saved IP), the desktop shortcut, and any Start Menu shortcut.
+Download `PlayStationBrowser_Uninstall.ps1` and run it with PowerShell. It closes the app if it is running, then removes the `AppData\Roaming\PlayStationBrowser` folder (including your saved IP), the desktop shortcut, and any Start Menu shortcut.
 
 Or run it straight from GitHub:
 
