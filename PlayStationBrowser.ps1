@@ -259,9 +259,29 @@ function Open-InBrowser {
 Invoke-SelfInstall
 Initialize-AppData
 $script:IconPath = Install-AppIcon
-Install-DesktopShortcut -IconPath $script:IconPath
-Install-StartMenuShortcut -IconPath $script:IconPath
-Update-IconCache
+
+# Only touch the shortcuts / notify Explorer when something actually changed.
+# Rewriting the .lnk files and broadcasting SHCNE_ASSOCCHANGED on every launch
+# makes Explorer redraw every desktop icon (the flashing).
+function Test-ShortcutCurrent {
+    param([string]$ShortcutPath, [string]$IconPath)
+    try {
+        if (-not (Test-Path $ShortcutPath)) { return $false }
+        $sc = (New-Object -ComObject WScript.Shell).CreateShortcut($ShortcutPath)
+        $expectedArgs = "-WindowStyle Hidden -ExecutionPolicy Bypass -File `"$script:InstallPath`""
+        return (($sc.IconLocation -eq "$IconPath,0") -and ($sc.Arguments -eq $expectedArgs))
+    } catch { return $false }
+}
+
+$desktopLnk   = [System.IO.Path]::Combine([Environment]::GetFolderPath('Desktop'), 'PlayStation Browser.lnk')
+$startMenuLnk = [System.IO.Path]::Combine([Environment]::GetFolderPath('StartMenu'), 'Programs\PlayStation Browser.lnk')
+
+$desktopOk   = Test-ShortcutCurrent -ShortcutPath $desktopLnk   -IconPath $script:IconPath
+$startMenuOk = Test-ShortcutCurrent -ShortcutPath $startMenuLnk -IconPath $script:IconPath
+
+if (-not $desktopOk)   { Install-DesktopShortcut   -IconPath $script:IconPath }
+if (-not $startMenuOk) { Install-StartMenuShortcut -IconPath $script:IconPath }
+if (-not ($desktopOk -and $startMenuOk)) { Update-IconCache }
 
 # Hide PowerShell window
 Add-Type -Name Window -Namespace Console -MemberDefinition '
