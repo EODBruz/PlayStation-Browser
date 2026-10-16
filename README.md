@@ -4,7 +4,7 @@ A tiny Windows app that opens a saved IP address plus a port you type, in a Chro
 
 Type the port, press **Enter** (or click **GO**), and it opens `http://IP:PORT`.
 
-Script by [@EODBruz](https://x.com/EODBruz)
+Version 1.0.0 | Script by [@EODBruz](https://x.com/EODBruz)
 
 ## Features
 
@@ -12,7 +12,7 @@ Script by [@EODBruz](https://x.com/EODBruz)
 - Opens the page in a clean Chrome app-mode window (no tabs or address bar)
 - Falls back to Edge or Brave if Chrome is not installed
 - Checks the IP and port before opening and shows errors in the window
-- Creates a desktop shortcut with the PlayStation icon
+- Creates a desktop shortcut and a Start Menu shortcut with the PlayStation icon
 - One single script, no extra files or dependencies
 
 ## Requirements
@@ -38,7 +38,16 @@ Open PowerShell and run:
 irm https://raw.githubusercontent.com/EODBruz/PlayStation-Browser/main/PlayStationBrowser.ps1 | iex
 ```
 
-On first run the app copies itself to `C:\Users\<your name>\AppData\Roaming\PlayStationBrowser` (the same place as `%APPDATA%\PlayStationBrowser`) and puts a **PlayStation Browser** shortcut on your desktop. Use that shortcut from then on.
+On first run the app copies itself to `C:\Users\<your name>\AppData\Roaming\PlayStationBrowser` (the same place as `%APPDATA%\PlayStationBrowser`) and puts a **PlayStation Browser** shortcut on your desktop and in the Start Menu. Use either one from then on.
+
+## Shortcuts
+
+The first time you run it, the app creates two shortcuts, both named **PlayStation Browser** and both using the PlayStation icon:
+
+- **Desktop** - on your desktop
+- **Start Menu** - press the Windows key and type "PlayStation Browser" to find it, or pin it to Start or the taskbar. It is stored at `C:\Users\<your name>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\PlayStation Browser.lnk`
+
+Both shortcuts are refreshed every time the app launches. If you delete one, running the app again brings it back. The uninstaller removes both.
 
 ## How to use
 
@@ -64,7 +73,7 @@ To open it quickly, press **Win + R**, type `%APPDATA%\PlayStationBrowser` and p
 | `PlayStationBrowser_<hash>.ico` | The shortcut icon |
 | `ip.txt` | Your saved IP address |
 
-The only other thing it creates is the desktop shortcut.
+The only other things it creates are the desktop shortcut and the Start Menu shortcut.
 
 ## Uninstall
 
