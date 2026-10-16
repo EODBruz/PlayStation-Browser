@@ -13,7 +13,7 @@
 
 .NOTES
     Script by: @EODBruz (PowerShell Development)
-    Version: 1.1.0
+    Version: 1.0.0
     X / Twitter: https://x.com/EODBruz
     GitHub: https://github.com/EODBruz/PlayStation-Browser
 
@@ -137,6 +137,34 @@ function Install-DesktopShortcut {
     } catch {}
 }
 
+function Install-StartMenuShortcut {
+    param([string]$IconPath)
+    try {
+        if (-not (Test-Path $script:InstallPath)) { return }
+        $startMenuDir = [System.IO.Path]::Combine(
+            [Environment]::GetFolderPath('StartMenu'),
+            'Programs'
+        )
+        if (-not (Test-Path $startMenuDir)) {
+            New-Item -ItemType Directory -Path $startMenuDir -Force | Out-Null
+        }
+        $shortcutPath = [System.IO.Path]::Combine($startMenuDir, 'PlayStation Browser.lnk')
+
+        # Always refresh the shortcut so the icon is applied even if it already exists
+        $wsh = New-Object -ComObject WScript.Shell
+        $sc  = $wsh.CreateShortcut($shortcutPath)
+        $sc.TargetPath       = "powershell.exe"
+        $sc.Arguments        = "-WindowStyle Hidden -ExecutionPolicy Bypass -File `"$script:InstallPath`""
+        $sc.WorkingDirectory = $script:InstallDir
+        $sc.Description      = "PlayStation Browser"
+        if ($IconPath -and (Test-Path $IconPath)) {
+            $sc.IconLocation = "$IconPath,0"
+        }
+        $sc.WindowStyle      = 7  # Minimized - hides the PowerShell flash
+        $sc.Save()
+    } catch {}
+}
+
 # ============================================================================
 # SAVED IP (txt file in AppData)
 # ============================================================================
@@ -232,6 +260,7 @@ Invoke-SelfInstall
 Initialize-AppData
 $script:IconPath = Install-AppIcon
 Install-DesktopShortcut -IconPath $script:IconPath
+Install-StartMenuShortcut -IconPath $script:IconPath
 Update-IconCache
 
 # Hide PowerShell window
